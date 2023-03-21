@@ -3,10 +3,11 @@
         <div class="modal-background"></div>
         <div class="modal-content">
             <section class="modal-card-body">
-                <label class="label">{{ messageToDisplay }}</label>
+                <label class="label">Do you really want to delete this record?</label>
 
             </section>
             <footer class="modal-card-foot">
+                <button @click="deleteRecord" class="button is-success">Delete</button>
                 <button @click.prevent="close()" class="button is-danger">Close</button>
             </footer>
 
@@ -18,7 +19,7 @@
 <script>
 
 export default {
-    name: 'ActionMessage',
+    name: 'deleteModal',
     data() {
         return {
             messageToDisplay: ''
@@ -26,22 +27,19 @@ export default {
     },
     props: {
         isActive: { type: Boolean, default: false, required: true },
-        type: { type: String },
-        sucess: { type: String },
-        message: { type: String },
+        //type: { type: String, required: true },
+        //sucess: { type: String, required: true }
 
     },
     methods: {
         close() {
             this.$emit('close-action');
         },
+        deleteRecord() {
+            this.$emit('delete-record');
+        },
         setMessage() {
-            if (!this.message) {
-                this.messageToDisplay = `The ${this.type} action was a ${this.sucess}`
-            }
-            else {
-                this.messageToDisplay = this.message
-            }
+            this.messageToDisplay = `The ${this.type} action was a ${this.sucess}`
         }
     },
     created() {
