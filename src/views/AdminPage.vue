@@ -124,6 +124,7 @@ export default {
     },
     async deleteRecord() {
       try {
+        await this.$records.deleteProperties(this.deleteIndex)
         this.records = await this.$records.deleteRecord(this.deleteIndex)
         this.showDeleteModal = false
         this.showMessageWindow({ type: 'delete', sucess: 'sucess' })
@@ -143,13 +144,13 @@ export default {
       this.sucess = data.sucess
       this.showMessage = true
     },
-    async setQrCodes() {
-      for (let index = 0; index < document.getElementsByTagName('img').length; index++) {
-        this.QRcodes.push({ recordId: this.records[index].id, image: document.getElementsByTagName('img')[index].src })
-      }
-      console.log(this.QRcodes[0])
-      await this.$records.postQrCode(13, document.getElementsByTagName('img')[0].src)
-    },
+    //async setQrCodes() {
+     // for (let index = 0; index < document.getElementsByTagName('img').length; index++) {
+     //   this.QRcodes.push({ recordId: this.records[index].id, image: document.getElementsByTagName('img')[index].src })
+     // }
+     // console.log(this.QRcodes[0])
+      //await this.$records.postQrCode(13, document.getElementsByTagName('img')[0].src)
+    //},
     async dowloadQrCode(id) {
       try {
         var img = await this.$records.downloadQRCode(`http://127.0.0.1:5022/static/images/QRcodes/record${id}.png`, `record with id ${id}`)

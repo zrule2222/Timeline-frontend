@@ -7,76 +7,6 @@ export const records = {}
 
 records.http = axios.create({ baseURL: "http://127.0.0.1:5022/api" })
 
-/* records.getAuthors = async function(value) {
-  const res = await this.checkAuthentification()
-  if(res != 500){
-  let response = null
-  if(value){
-    response = await this.http.get(`/author/${value}`)
-  }
-  else{
-    response = await this.http.get(`/authors`)
-  }
-    return response.data
-}
-  }
-  records.getArticles = async function(value) {
-    const res = await this.checkAuthentification()
-    if(res != 500){
-    let response = null
-    if(value){
-    response = await this.http.get(`/article/${value}`)
-    }
-    else{
-      response = await this.http.get(`/articles`)
-    }
-    return response.data
-  }
-  }
-
-  records.getArticlesByPage = async function(totalPages, limit, searchedValue) {
-    const res = await this.checkAuthentification()
-    if(res != 500){
-    let response = null
-    if(searchedValue){
-    response = await this.http.get(`/articlePaginationSearch/${totalPages}/${limit}/${searchedValue}`)
-    }
-    else{
-      response = await this.http.get(`/articlePagination/${totalPages}/${limit}`)
-    }
-    return response
-  }
-  }
-  records.getArticlesByPageCount = async function(totalPages, limit, searchedValue) {
-    const res = await this.checkAuthentification()
-    if(res != 500){
-    let response = null
-    if(searchedValue){
-    response = await this.http.get(`/articlePaginationSearchPages/${totalPages}/${limit}/${searchedValue}`)
-    }
-    else{
-      response = await this.http.get(`/articlePaginationPages/${totalPages}/${limit}`)
-    }
-    return response
-  }
-  }
-  records.deleteArticle = async function(id) {
-    const res = await this.checkAuthentification()
-    if(res != 500){
-    await this.http.delete(`/article/${id}`)
-    }
-  }
-
-  records.updateArticle = async function(id, title, content) {
-    const res = await this.checkAuthentification()
-  if(res != 500){
-    await this.http.put(`/article/${id}`, {
-      title: title,
-      body: content,
-    })
-  }
-  }
-  */
 records.deleteImages = async function (id, images) {
   const res = await this.checkAuthentification()
   let response = null
@@ -84,6 +14,43 @@ records.deleteImages = async function (id, images) {
     response = await this.http.post(`/ImageDelete/${id}`, images)
   }
   //return response.data
+}
+records.deletepoperties= async function (idArray) {
+  console.log(idArray)
+  const res = await this.checkAuthentification()
+  let response = null
+  if (res != 500) {
+    response = await this.http.post(`/PropertyDelete`, idArray)
+  }
+  //return response.data
+}
+records.updateProperties = async function (id, property) {
+  const res = await this.checkAuthentification()
+  if (res != 500) {
+    await this.http.put(`/Property/${id}`, property)
+  }
+}
+records.deleteProperties = async function (id) {
+  const res = await this.checkAuthentification()
+  let response = null
+  if (res != 500) {
+    response = await this.http.delete(`/Properties/${id}`)
+  }
+  //return response.data
+}
+records.getProperties = async function (id) {
+
+    let response = await this.http.get(`/Properties/${id}`)
+    
+  return response.data
+}
+records.postProperties = async function (properties, id) {
+  const res = await this.checkAuthentification()
+  let response = null
+  if (res != 500) {
+    response = await this.http.post(`/Properties/${id}`, properties)
+  }
+  return response.data
 }
 records.postQrCode = async function (id, url) {
   let formData = new FormData();

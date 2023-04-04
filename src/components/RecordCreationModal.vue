@@ -1,5 +1,6 @@
 <template>
   <div>
+  
     <div class="modal" :class="{ 'is-active': isActive }">
       <div class="modal-background"></div>
       <div class="modal-content">
@@ -35,6 +36,48 @@
               class="textarea" placeholder="Short description area"></textarea>
             <p v-show="badRecordShortDescription" class="help is-danger">Short Description is empty</p>
           </div>
+          
+          <div class="field">
+            <label class="label">Record property</label>
+            <div class="control">
+              <div v-for="(property, index) in properties" :key="index">
+                <div class="columns is-mobile is-multiline">
+                  <div class="column -mb-5" >
+              <input class="input" :class="property.emptyProperty ? 'is-danger' : ''" v-model="property.propertyName" type="text"
+                placeholder="Property">
+              </div>
+              <div class="column -mb-5" >
+              <button class="button" v-show="index != 0" @click="removeCreatePropertyField(index, property.id)"> 
+                Remove property
+              </button>
+            </div>
+            </div>
+            <p v-show="property.emptyProperty" class="help is-danger">Record property is empty</p>
+            </div>
+            <div>
+            <div v-for="(newproperty, updateIndex) in updatePropertiesToAdd" :key="updateIndex">
+                <div class="columns is-mobile is-multiline">
+                  <div class="column -mb-5" >
+              <input class="input" :class="newproperty.emptyProperty ? 'is-danger' : ''" v-model="newproperty.propertyName" type="text"
+                placeholder="Property">
+              </div>
+              <div class="column -mb-5" >
+              <button class="button"  @click="removeUpdatePropertyField(updateIndex, newproperty.id)"> 
+                Remove property
+              </button>
+            </div>
+            </div>
+            <p v-show="newproperty.emptyProperty" class="help is-danger">Record property is empty</p>
+          </div>
+            </div>
+            </div>
+          </div>
+        
+        <div>
+          <button class="button is-primary" @click="addPropertyField()">
+            Add another property
+          </button>
+        </div>
           <div class="field">
             <label class="label">Record type</label>
             <div class="control">
@@ -109,6 +152,15 @@ export default {
       newImageToUpdate: [],
       imagesToRemove: [],
       imageNames: [],
+      properties: [
+        {
+          propertyName: "",
+          emptyProperty: false,
+          id: 0
+        },
+      ],
+      propertiesToRemove: [],
+      updatePropertiesToAdd:[]
     }
   },
   components: {
@@ -152,6 +204,13 @@ export default {
       else {
         this.badRecordShortDescription = false
       }
+      if(this.checkForEmptyPropertyField()){
+        return false
+      }
+      if(this.checkForEmptyNewUpdatePropertyField()){
+        return false
+      }
+      
       if (!this.recordType) {
         this.badRecordType = true
         return false
@@ -183,6 +242,19 @@ export default {
           const response = await this.$records.postRecord(record)
           if (response) {
             this.recordId = response.id
+            let propertiesToAdd = {
+              
+              properties: [
+                
+              ]
+                
+              
+            }
+            for (let index = 0; index < this.properties.length; index++) {
+              propertiesToAdd.properties.push(this.properties[index].propertyName)
+              
+            }
+            await this.$records.postProperties(propertiesToAdd,this.recordId)
 
             await this.generateQrCode(this.recordId)
 
@@ -214,12 +286,35 @@ export default {
             record_type: this.recordType,
             is_visible: this.isVisible
           }
+          
           await this.$records.updateRecord(this.editIndex, record)
           if (this.newImageToUpdate.length > 0) {
             await this.$records.postImage(this.editIndex, this.newImageToUpdate)
           }
           if (this.imagesToRemove.length > 0) {
             await this.$records.deleteImages(this.editIndex, this.imagesToRemove)
+          }
+          if(this.updatePropertiesToAdd.length > 0){
+            let propertiesToAdd = {
+              
+              properties: [
+                
+              ]
+                
+              
+            }
+            for (let index = 0; index < this.updatePropertiesToAdd.length; index++) {
+              propertiesToAdd.properties.push(this.updatePropertiesToAdd[index].propertyName)
+              
+            }
+            await this.$records.postProperties(propertiesToAdd,this.editIndex)
+          }
+          for (let index = 0; index < this.properties.length; index++) {
+            await this.$records.updateProperties(this.properties[index].id, {"property": this.properties[index].propertyName})
+            
+          }
+          if(this.propertiesToRemove.length > 0){
+            await this.$records.deletepoperties(this.propertiesToRemove)
           }
           this.closeAfterAction('update', 'sucess')
         }
@@ -281,10 +376,23 @@ export default {
           nameArray.push(response2.names[index])
         }
         this.imageNames = response2.names
+        
+        const recordProperties = await this.$records.getProperties(this.editIndex)
+        for (let index = 0; index < recordProperties.length; index++) {
+          if(index != 0){
+          this.properties.push({
+        propertyName: "",
+        emptyProperty: false,
+        id:0
+      });
+    }
+          this.properties[index].propertyName = recordProperties[index].property
+          this.properties[index].id = recordProperties[index].id
+        }
       }
     }
     catch(error){
-      
+      console.log(error)
     }
     },
     async generateQrCode(id) {
@@ -295,6 +403,59 @@ export default {
         .catch(err => {
           console.error(err)
         })
+    },
+    addPropertyField(){
+      if (this.actionType != 'edit'){
+      this.properties.push({
+        propertyName: "",
+        emptyProperty: false,
+        id: 0
+      });
+    }
+    else{
+      this.updatePropertiesToAdd.push({
+        propertyName: "",
+        emptyProperty: false,
+        id: 0
+      });
+    }
+    },
+    removeCreatePropertyField(index,propertyId){
+      this.propertiesToRemove.push(propertyId)
+      this.properties.splice(index, 1);
+    },
+    removeUpdatePropertyField(index){
+        this.updatePropertiesToAdd.splice(index, 1);
+    },
+    checkForEmptyPropertyField(){
+      let emptyFieldFound = false
+      for (let index = 0; index < this.properties.length; index++) {
+        if(this.properties[index].propertyName == ""){
+          this.properties[index].emptyProperty = true
+          emptyFieldFound = true
+        }
+        else{
+          this.properties[index].emptyProperty = false
+        }
+        
+      }
+      return emptyFieldFound
+      
+    },
+    checkForEmptyNewUpdatePropertyField(){
+      let emptyFieldFound = false
+      for (let index = 0; index < this.updatePropertiesToAdd.length; index++) {
+        if(this.updatePropertiesToAdd[index].propertyName == ""){
+          this.updatePropertiesToAdd[index].emptyProperty = true
+          emptyFieldFound = true
+        }
+        else{
+          this.updatePropertiesToAdd[index].emptyProperty = false
+        }
+        
+      }
+      return emptyFieldFound
+      
     }
 
 
