@@ -7,7 +7,7 @@
              //{{year}}
           </div>
           <div class="w-[174px] h-[107px] pl-[28px] pt-[28px] flex flex-col ">
-            <img :src="`http://127.0.0.1:5022/static/images/${recordId}/${recordImages[0]}`" class="min-h-0
+            <img :src="`${this.$baseUrlImage}/static/images/${recordId}/${recordImages[0]}`" class="min-h-0
             ">
           </div>
           <div class="w-[234px] h-[27px] pl-[28px] pt-[28px] font-bold text-[16px] text-primary-black leading-5">

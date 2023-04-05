@@ -153,7 +153,7 @@ export default {
     //},
     async dowloadQrCode(id) {
       try {
-        var img = await this.$records.downloadQRCode(`http://127.0.0.1:5022/static/images/QRcodes/record${id}.png`, `record with id ${id}`)
+        var img = await this.$records.downloadQRCode(`${this.$baseUrlImage}/static/images/QRcodes/record${id}.png`, `record with id ${id}`)
       }
       catch (error) {
         this.modalMessage = "No QR code found"

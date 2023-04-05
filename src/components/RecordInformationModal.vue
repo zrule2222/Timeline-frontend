@@ -25,7 +25,7 @@
                         <label class="label has-text-centered">Images</label>
                         <div v-if="recordImages">
                             <div v-for="(image, index) in recordImages">
-                                <img :src="`http://127.0.0.1:5022/static/images/${recordIndex}/${image}`" />
+                                <img :src="`${this.$baseUrlImage}/static/images/${recordIndex}/${image}`" />
                             </div>
                         </div>
                     </div>

@@ -2,23 +2,61 @@
   <div id="__nuxt">
     <div id="__layout">
       <div class="flex flex-col min-h-screen">
-        <RecordModalForTimeline v-if="openRecordModal" :recordId="recordId" @close="closeRecordInfoModal" :isActive="openRecordModal">
+        <RecordModalForTimeline v-if="openRecordModal" :recordId="recordId" @close="closeRecordInfoModal"
+          :isActive="openRecordModal">
         </RecordModalForTimeline>
-        menu here
+        <header class="fixed top-0 left-0 z-[48] w-full text-white duration-200 bg-primary">
+          <div class=" flex items-center justify-center relative w-full h-[52px] ">
+            <div class="px-3">
+              <a href="/" class="nuxt-link-active">
+                <img src="https://teltonika-iot-group.com/cdn/companies/light/iot-light.svg" alt="logo" width="191"
+                  height="27" class="w-full h-7 max-w-[140px] sm:max-w-full">
+              </a>
+            </div>
+            <div class="absolute top-0 right-0 flex items-center justify-between h-full sm:mr-0 md:mr-12">
+              <div class="flex items-center h-full sm:mr-8 relative group c-disable-tap-highlight select-none z-20">
+                <div class="flex flex-row cursor-pointer group">
+                  <img src="../assets/lt_flag.png" class="w-6 h-6">
+                  <span class="pl-1 font-medium font-oswald text-sm text-white uppercase ">
+                    LT
+                  </span>
+                  <img src="../assets/menu_arrow.svg" class="group-hover:rotate-180">
+                </div>
+              </div>
+              <div class="cursor-pointer">
+                <img src="../assets/search.png">
+              </div>
+              <div class="ml-8" data-v-b17b108a="">
+                <div class="flex items-start relative" data-v-b17b108a="">
+                  <div tabindex="0" class="outline-none hamburger-menu hamburger-menu--lg relative top-1"
+                    data-v-b17b108a="">
+                    <img src="../assets/Menu_lines.png">
+                  </div>
+                  <div class="absolute inset-0 cursor-pointer" data-v-b17b108a="">
+
+                  </div>
+                  <div class="text-white font-oswald text-sm font-medium ml-1.5" data-v-b17b108a="">
+                    MENU
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </header>
         <div class="bg-white h-screen">
-          <div class="container max-w-5xl mb-1">
+          <div class="container max-w-5xl mb-1 md:ml-28 sm:ml-10">
             <div class=" flex  -mx-6 md:block md:mx-0">
               <div class="flex h-[545px] w-full flex-1 flex-col pb-10 -mx-5  md:mx-0 md:pr-8 last:pr-0 md:pb-0">
                 <div data-v-961f3a84=""
-                  class=" relative z-10 object-top mt-36  items-center w-full text-primary-text font-oswald font-semibold uppercase  text-[32px]">
-                  <div data-v-961f3a84="" name="div" class="w-full mb-6  flex items-center md:mb-2 font-bold">
+                  class=" relative z-10 object-top mt-36  items-center w-full text-primary-text font-oswald font-semibold uppercase  md:text-[32px] sm:text-[20px]">
+                  <div data-v-961f3a84="" name="div" class="w-full mb-6  flex items-center md:mb-2 font-bold ">
                     Teltonika Networks
                   </div>
 
                 </div>
                 <div class="flex flex-row">
                   <div
-                    class="font-oswald z-10 leading-[98px]  relative md:text-3.5xl mb-4 w-auto md:w-auto md:mb-8 text-[96px] font-bold text-primary-text ">
+                    class="font-oswald z-10 leading-[98px]  relative md:text-3.5xl mb-4 w-auto md:w-auto md:mb-8 md:text-[96px] sm:text-[68px] font-bold text-primary-text ">
                     PRODUCTS
                     <br>
                     MUSEUM
@@ -26,7 +64,7 @@
                   </div>
                   <div class="slider" v-dragscroll.x>
                     <div v-for="(date, index) in dates" :key="date"
-                      class="z-10 flex h-[20px] leading-[20px] justify-center items-center mt-[170px]">
+                      class="z-10 flex h-[20px] leading-[20px] justify-center items-center md:mt-[170px] sm:mt-[156px]">
                       <div @mouseenter="changeDateColor = true, dateToHighlight = date"
                         @mouseleave="changeDateColor = false, dateToHighlight = 0"
                         :class="[changeDateColor && dateToHighlight == date ? ['underline', '!text-primary-text', 'decoration-primary-text'] : '']"
@@ -39,7 +77,7 @@
                   </div>
 
                 </div>
-                <section class="absolute bg-cover-image ml-[324px] w-[1057px] h-[545px] from-white ">
+                <section class="absolute bg-cover-image ml-[324px] w-[1057px] h-[545px] from-white md:ml-[270px] sm:ml-[100px] ">
 
                   <div class=" absolute box-border h-2/3 w-full z-1 bg-gradient-to-t inset-x-0 bottom-0">
                   </div>
@@ -53,26 +91,26 @@
               </div>
             </div>
           </div>
-          <div class="flex flex-row space-x-0">
+          <div class="flex flex-row space-x-1 md:ml-14 sm:ml-0">
             <div class="slider pt-5" v-dragscroll.x>
               <div v-for="(record, index) in visibleRecords" :key="record.id">
                 <div class="flex flex-row items-end">
                   <div class="mb-24 ">
                     <div v-if="index == 0"
-                      class="text-primary-text text-[40px] font-bold leading-[40px] font-oswald text-right ml-20 ">
+                      class="text-primary-text text-[40px] font-bold leading-[40px] font-oswald text-right md:ml-20 sm:ml-5 ">
                       {{ record.date }}
                       <img src="../assets/arrow.png" class="object-cover">
                     </div>
-
-                    <img v-else-if="record.date == visibleRecords[index - 1].date" src="../assets/divide.png"
-                      class="object-cover md:min-w-full shrink-0">
+                    <div v-else-if="record.date == visibleRecords[index - 1].date" class="w-[16px] h-[2px]">
+                      <img src="../assets/divide.png" class="object-cover md:min-w-full shrink-0">
+                    </div>
                     <div v-else class="text-primary-text text-[40px] font-bold leading-[40px] font-oswald text-right ">
                       {{ record.date }}
                       <img src="../assets/arrow.png" class="object-cover">
                     </div>
                   </div>
 
-                  <RecordDisplay @click.native="openRecordInfoModal(record.id)" class="mx-2" :year="record.date"
+                  <RecordDisplay :id="`${record.id}`" @click.native="openRecordInfoModal(record.id)" class="mx-2" :year="record.date"
                     :name="record.name" :shortDecs="record.description_short" :recordId="record.id"></RecordDisplay>
                 </div>
               </div>
@@ -158,9 +196,11 @@
                         class="flex items-baseline justify-center text-left sm:block w-full">
                         <div class="w-full"><input type="email" placeholder="Email Address" value=""
                             class="block w-full h-8 px-2 font-sans text-xs font-normal text-gray-300 placeholder-white bg-transparent border rounded-md outline-none sm:mb-3 hover:text-white sm:mr-0 border-white">
-                          <!----></div> 
-                          <button aria-label="Subscribe button" class="absolute z-10 text-white top-2 right-3 focus:outline-none hover:text-gray-200">
-                           <img src="../assets/mail.svg">
+                          <!---->
+                        </div>
+                        <button aria-label="Subscribe button"
+                          class="absolute z-10 text-white top-2 right-3 focus:outline-none hover:text-gray-200">
+                          <img src="../assets/mail.svg">
                         </button>
                       </form> <!---->
                     </div>
@@ -171,21 +211,20 @@
                     </div>
                     <div class="flex justify-center mb-6 sm:justify-start"><a target="_blank"
                         href="https://www.linkedin.com/company/teltonika" rel="noreferrer" aria-label="linkedin"
-                        class="mr-6 transition duration-200 opacity-100 sm:mr-0 sm:ml-6 hover:opacity-80"> 
+                        class="mr-6 transition duration-200 opacity-100 sm:mr-0 sm:ml-6 hover:opacity-80">
                         <img src="../assets/linkedin.svg">
                       </a>
-                      <a target="_blank" href="https://www.youtube.com/channel/UCTt_LNyu32CC7jLCiAYVwrw"
-                        rel="noreferrer" aria-label="youtube"
+                      <a target="_blank" href="https://www.youtube.com/channel/UCTt_LNyu32CC7jLCiAYVwrw" rel="noreferrer"
+                        aria-label="youtube"
                         class="mr-6 transition duration-200 opacity-100 sm:mr-0 sm:ml-6 hover:opacity-80">
                         <img src="../assets/youtube.svg">
                       </a>
-                      <a target="_blank" href="https://www.facebook.com/TELTONIKAinternational/"
-                        rel="noreferrer" aria-label="facebook"
+                      <a target="_blank" href="https://www.facebook.com/TELTONIKAinternational/" rel="noreferrer"
+                        aria-label="facebook"
                         class="mr-6 transition duration-200 opacity-100 sm:mr-0 sm:ml-6 hover:opacity-80">
                         <img src="../assets/fb.svg">
                       </a>
-                      <a target="_blank" href="https://twitter.com/teltonika" rel="noreferrer"
-                        aria-label="twitter"
+                      <a target="_blank" href="https://twitter.com/teltonika" rel="noreferrer" aria-label="twitter"
                         class="mr-6 transition duration-200 opacity-100 sm:mr-0 sm:ml-6 hover:opacity-80">
                         <img src="../assets/twitter.svg">
                       </a>
@@ -291,7 +330,9 @@ export default {
     checkIfShowRecordOnLoad() {
       if (this.$route.params.id && this.$route.meta.showIfnoModal) {
         this.recordId = parseInt(this.$route.params.id)
-        this.showIfnoModal = this.$route.meta.showIfnoModal
+        this.openRecordModal = this.$route.meta.showIfnoModal
+        document.getElementById(`${this.recordId}`).scrollIntoView()
+        window.scrollTo(0,0);
       }
     },
     sortRecordsByDate() {
@@ -300,14 +341,21 @@ export default {
       });
     }
   },
-  created() {
-    this.checkIfShowRecordOnLoad()
+  mounted() {
+
     this.getVisibleRecords()
+    document.onreadystatechange = () => { 
+    if (document.readyState == "complete") { 
+      this.checkIfShowRecordOnLoad()
+    } 
+  }
+
   }
 }
 
 </script>
-<style>.slider {
+<style>
+.slider {
   display: flex;
   overflow-x: hidden;
 }</style>

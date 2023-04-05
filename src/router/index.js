@@ -76,8 +76,8 @@ const router = new VueRouter({
       return new Promise((resolve, reject) => {
         setTimeout(() => {
           resolve({
-            selector: to.hash,
-            behavior: 'smooth'
+            // selector: { x: 0, y: 0 },
+            // behavior: 'smooth'
           })
         }, 40)
       })
@@ -96,7 +96,7 @@ router.beforeEach(async (to, from, next) => {
       next();
     }
     try {
-      await axios.get("http://127.0.0.1:5022/api/auth/status", {
+      await axios.get(`http://127.0.0.1:5022/api/auth/status`, {
         headers: {
           Authorization: 'Bearer ' + localStorage.getItem('token')
         }

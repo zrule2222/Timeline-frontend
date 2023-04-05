@@ -372,7 +372,7 @@ export default {
         const response2 = await this.$records.getRecordImages(this.editIndex)
         let nameArray = []
         for (let index = 0; index < response2.names.length; index++) {
-          this.images.push(`http://127.0.0.1:5022/static/images/${this.editIndex}/${response2.names[index]}`)
+          this.images.push(`${this.$baseUrlImage}/static/images/${this.editIndex}/${response2.names[index]}`)
           nameArray.push(response2.names[index])
         }
         this.imageNames = response2.names
@@ -396,7 +396,7 @@ export default {
     }
     },
     async generateQrCode(id) {
-      await QRCode.toDataURL(`http://localhost:8080/record/${id}/#${id}`)
+      await QRCode.toDataURL(`${this.$baseUrl}/record/${id}/#${id}`)
         .then(url => {
           this.QRuri = url
         })

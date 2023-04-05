@@ -12,6 +12,8 @@ import '../index.css'
 
 
 Vue.config.productionTip = false;
+Vue.prototype.$baseUrlImage = 'http://127.0.0.1:5022'
+Vue.prototype.$baseUrl = 'http://localhost:8080'
 Vue.use(services)
 Vue.use(VueMaterial)
 Vue.use(VueDragscroll)

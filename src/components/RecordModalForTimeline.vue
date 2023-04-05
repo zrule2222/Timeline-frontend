@@ -1,6 +1,6 @@
 <template>
     <div>
-         <button class="top-0 right-0 z-[11] absolute pt-7 xl:pr-20 md:pr-5 text-white " @click="close()"><img src="../assets/x.svg" ></button>
+         <button class="top-0 right-0 z-[11] absolute pt-20 xl:pr-20 md:pr-5 text-white " @click="close()"><img src="../assets/x.svg" ></button>
 <md-dialog :md-active.sync="active" @md-closed="close()">
     
     <md-dialog-content class="scrollbar"  >
@@ -20,7 +20,7 @@
     </div>
     
         <div class="rounded-md bg-record-display-primary flex justify-end items-center font-bold w-[349px] h-[228px] inset-y-0 right-0 ml-auto">
-        <img :src="`http://127.0.0.1:5022/static/images/${recordId}/${recordImages[0]}`" class="w-[247px] max-h-[151px] mx-auto ">
+        <img :src="`${this.$baseUrlImage}/static/images/${recordId}/${recordImages[0]}`" class="w-[247px] max-h-[151px] mx-auto ">
     </div>
 </div>
 <div class="text-primary-black font-sans text-[14px] eading-[20px] break-normal mb-4">
@@ -69,7 +69,7 @@
             this.recordDate = new Date(response.date).getUTCFullYear()
             this.recordName = response.name
             const response2 = await this.$records.getRecordImages(this.recordId)
-            this.recordImages = response2.names
+           this.recordImages = response2.names
             this.recordDescription = response.description
             const recordProperties = await this.$records.getProperties(this.recordId)
             for (let index = 0; index < recordProperties.length; index++) {
