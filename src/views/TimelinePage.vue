@@ -5,7 +5,7 @@
         <RecordModalForTimeline v-if="openRecordModal" :recordId="recordId" @close="closeRecordInfoModal"
           :isActive="openRecordModal">
         </RecordModalForTimeline>
-        <header class="fixed top-0 left-0 z-[48] w-full text-white duration-200 bg-primary">
+        <header class="fixed top-0 left-0 z-[48] w-full text-white duration-200 bg-primary-darken">
           <div class=" flex items-center justify-center relative w-full h-[52px] ">
             <div class="px-3">
               <a href="/" class="nuxt-link-active">
@@ -13,8 +13,8 @@
                   height="27" class="w-full h-7 max-w-[140px] sm:max-w-full">
               </a>
             </div>
-            <div class="absolute top-0 right-0 flex items-center justify-between h-full sm:mr-0 md:mr-12">
-              <div class="flex items-center h-full sm:mr-8 relative group c-disable-tap-highlight select-none z-20">
+            <div class="absolute top-0 right-0 flex items-center justify-between h-full sm:mr-0 md:mr-0">
+              <div class="flex items-center h-full sm:mr-4 relative group c-disable-tap-highlight select-none z-20">
                 <div class="flex flex-row cursor-pointer group">
                   <img src="../assets/lt_flag.png" class="w-6 h-6">
                   <span class="pl-1 font-medium font-oswald text-sm text-white uppercase ">
@@ -28,16 +28,6 @@
               </div>
               <div class="ml-8" data-v-b17b108a="">
                 <div class="flex items-start relative" data-v-b17b108a="">
-                  <div tabindex="0" class="outline-none hamburger-menu hamburger-menu--lg relative top-1"
-                    data-v-b17b108a="">
-                    <img src="../assets/Menu_lines.png">
-                  </div>
-                  <div class="absolute inset-0 cursor-pointer" data-v-b17b108a="">
-
-                  </div>
-                  <div class="text-white font-oswald text-sm font-medium ml-1.5" data-v-b17b108a="">
-                    MENU
-                  </div>
                 </div>
               </div>
             </div>
@@ -62,13 +52,13 @@
                     MUSEUM
 
                   </div>
-                  <div class="slider" v-dragscroll.x>
+                  <div class="slider" v-dragscroll.x >
                     <div v-for="(date, index) in dates" :key="date"
                       class="z-10 flex h-[20px] leading-[20px] justify-center items-center md:mt-[170px] sm:mt-[156px]">
-                      <div @mouseenter="changeDateColor = true, dateToHighlight = date"
+                      <div @click="scrollToDate(date)" @mouseenter="changeDateColor = true, dateToHighlight = date"
                         @mouseleave="changeDateColor = false, dateToHighlight = 0"
                         :class="[changeDateColor && dateToHighlight == date ? ['underline', '!text-primary-text', 'decoration-primary-text'] : '']"
-                        class="flex text-[16px] font-oswald font-bold  leading-5 z-10 text-primary-dates text-base mr-1  left-[37.92%] right-[6.25%] content-center">
+                        class="flex text-[16px] font-oswald font-bold cursor-pointer leading-5 z-10 text-primary-dates text-base mr-1  left-[37.92%] right-[6.25%] content-center">
                         {{ date }}</div>
                       <div v-if="index != dates.length - 1"
                         class="text-base  leading-5 font-bold font-oswald z-10 text-primary-black mr-2 ml-2 content-center left-[878px] right-[6.25%] w-[2px] h-[2px] mb-[27px] mr ">
@@ -91,13 +81,13 @@
               </div>
             </div>
           </div>
-          <div class="flex flex-row space-x-1 md:ml-14 sm:ml-0">
-            <div class="slider pt-5" v-dragscroll.x>
+          <div v-if="visibleRecords.length > 0" class="flex flex-row space-x-1 md:ml-14 sm:ml-0">
+            <div class="slider pt-5" v-dragscroll.x v-on:dragscrollstart="wasDraged">
               <div v-for="(record, index) in visibleRecords" :key="record.id">
-                <div class="flex flex-row items-end">
-                  <div class="mb-24 ">
+                <div class="flex flex-row items-end" @click="wasOutsideBox">
+                  <div class="mb-24 " >
                     <div v-if="index == 0"
-                      class="text-primary-text text-[40px] font-bold leading-[40px] font-oswald text-right md:ml-20 sm:ml-5 ">
+                      class="text-primary-text text-[40px]  font-bold leading-[40px] font-oswald text-right md:ml-20 sm:ml-5 ">
                       {{ record.date }}
                       <img src="../assets/arrow.png" class="object-cover">
                     </div>
@@ -110,7 +100,7 @@
                     </div>
                   </div>
 
-                  <RecordDisplay :id="`${record.id}`" @click.native="openRecordInfoModal(record.id)" class="mx-2" :year="record.date"
+                  <RecordDisplay  :id="`${record.id}`" @click.native="openRecordInfoModal(record.id)" class="mx-2" :year="record.date"
                     :name="record.name" :shortDecs="record.description_short" :recordId="record.id"></RecordDisplay>
                 </div>
               </div>
@@ -118,6 +108,11 @@
 
 
           </div>
+          <div v-else class="container max-w-5xl mb-1 md:ml-28 sm:ml-0">
+          <div class="font-oswald z-10 leading-[98px]  relative md:text-3.5xl mb-4 w-auto md:w-fill md:mb-8 md:text-[96px] sm:text-[68px] font-bold text-primary-text break-words">
+THERE ARE NO RECORDS TO DISPLAY
+          </div>
+        </div>
 
         </div>
         <footer class="py-11 md:py-14 bg-primary-darken mt-auto">
@@ -265,6 +260,7 @@ import RecordInformationModal from '../components/RecordInformationModal.vue'
 import RecordDisplay from '../components/RecordDisplay.vue'
 import youtube from '../assets/youtube.svg'
 import RecordModalForTimeline from '../components/RecordModalForTimeline.vue'
+import { timeout } from 'q'
 
 
 export default {
@@ -281,7 +277,8 @@ export default {
       youtube,
       changeDateColor: false,
       dateToHighlight: 0,
-      openRecordModal: false
+      openRecordModal: false,
+      dragged: false,
 
 
     }
@@ -319,8 +316,13 @@ export default {
       }
     },
     openRecordInfoModal(id) {
+      if(this.dragged == false){
       this.recordId = id
       this.openRecordModal = true
+      }
+      else{
+        setTimeout(() =>{this.dragged = false},10)
+      }
     },
     closeRecordInfoModal() {
       this.openRecordModal = false
@@ -331,24 +333,49 @@ export default {
       if (this.$route.params.id && this.$route.meta.showIfnoModal) {
         this.recordId = parseInt(this.$route.params.id)
         this.openRecordModal = this.$route.meta.showIfnoModal
-        document.getElementById(`${this.recordId}`).scrollIntoView()
-        window.scrollTo(0,0);
+        document.getElementById(`${this.recordId}`).scrollIntoView({
+            behavior: 'auto',
+            block: 'nearest',
+            inline: 'center'
+        })
+        //window.scrollTo(0,0);
       }
     },
+    scrollToDate(date){
+     let elements = []
+     for (let index = 0; index < this.visibleRecords.length; index++) {
+      if(this.visibleRecords[index].date == date){
+         elements.push(this.visibleRecords[index])
+      }
+      
+     }
+     document.getElementById(`${elements[0].id}`).scrollIntoView({
+            behavior: 'smooth',
+            block: 'nearest',
+            inline: 'center'
+        })
+     //window.scrollTo(0,0);
+    },
+    wasDraged(){
+  this.dragged= true
+  },
+  wasOutsideBox(){
+    setTimeout(() =>{this.dragged = false},10)
+  },
     sortRecordsByDate() {
       this.visibleRecords.sort((a, b) => {
         return new Date(a.date) - new Date(b.date);
       });
     }
   },
+
   mounted() {
 
     this.getVisibleRecords()
-    document.onreadystatechange = () => { 
-    if (document.readyState == "complete") { 
-      this.checkIfShowRecordOnLoad()
-    } 
-  }
+    setTimeout(() => this.checkIfShowRecordOnLoad(), 300);
+       //this.checkIfShowRecordOnLoad()
+    
+  
 
   }
 }

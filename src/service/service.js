@@ -180,7 +180,23 @@ records.checkAuthentification = async function () {
     router.push({ name: 'Login', params: { message: "You do not have a valid session. Please log in" } })
     return 500
   }
+},
+records.getUserData = async function () {
+   let response = await this.http.get("/auth/status", {
+      headers: {
+        Authorization: 'Bearer ' + localStorage.getItem('token'),
+      }
+    })
+    return response.data
 }
+records.logout = async function() {
+  await this.http.post("/auth/logout","",{
+    headers: {
+      Authorization: 'Bearer ' + localStorage.getItem('token'),
+    }
+  })
+  router.push({name:'Login', params:{message:"Loged out successfully"}})
+ }
 
 export default {
   install(Vue) {

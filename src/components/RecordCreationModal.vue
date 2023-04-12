@@ -1,8 +1,8 @@
 <template>
   <div>
-  
     <div class="modal" :class="{ 'is-active': isActive }">
       <div class="modal-background"></div>
+      <div class="modal-card">
       <div class="modal-content">
         <header class="modal-card-head">
 
@@ -102,22 +102,25 @@
               <div v-for="(image, index) in images">
                 <img v-if="actionType == 'create'" :src="image" />
                 <img v-else :src="`${image}`" />
-                <button @click="removeImage(index)">Remove image</button>
+                <button class="button is-small" @click="removeImage(index)">Remove image</button>
               </div>
             </div>
           </div>
+        
 
         </section>
 
-        <footer class="modal-card-foot">
+        <footer class="modal-card-foot flex flex-row justify-between">
           <button @click="doAction" class="button is-success">Save changes</button>
           <button @click.prevent="close()" class="button is-danger">Close</button>
         </footer>
 
 
       </div>
+      </div>
     </div>
   </div>
+
 </template>
 
 <script>
@@ -371,11 +374,13 @@ export default {
         this.isVisible = response.is_visible
         const response2 = await this.$records.getRecordImages(this.editIndex)
         let nameArray = []
+        if(response2.names){
         for (let index = 0; index < response2.names.length; index++) {
           this.images.push(`${this.$baseUrlImage}/static/images/${this.editIndex}/${response2.names[index]}`)
           nameArray.push(response2.names[index])
         }
         this.imageNames = response2.names
+      }
         
         const recordProperties = await this.$records.getProperties(this.editIndex)
         for (let index = 0; index < recordProperties.length; index++) {

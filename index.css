@@ -29,4 +29,14 @@
       .scrollbar::-webkit-scrollbar-thumb:hover {
         background: #E4E4E4;
       }
+
+      .line-clamp{
+        display: -webkit-box;
+        overflow: clip;
+        -webkit-line-clamp: 6;
+        -webkit-box-orient: vertical;
+      }
+      .no-line-clamp{
+        -webkit-line-clamp: unset;
+      }
   }

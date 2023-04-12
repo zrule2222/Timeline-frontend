@@ -1,11 +1,14 @@
 <template>
   <form @submit.prevent="login">
     <div class="hero is-fullheight">
-      <section class="hero is-primary is-small">
+      <section class="hero bg-primary is-small">
         <div class="hero-body is-justify-content-center">
-          <p class="title">
-            Teltonika
-          </p>
+          <div class="px-3">
+
+                <img src="https://teltonika-iot-group.com/cdn/companies/light/iot-light.svg" alt="logo" width="191"
+                  height="27" class="w-full h-7 max-w-[140px] sm:max-w-full">
+
+            </div>
         </div>
       </section>
       <div v-if="showError" class="notification is-danger has-text-centered">
@@ -18,19 +21,19 @@
         <div class="columns is-flex is-flex-direction-column box">
           <div class="column">
             <label for="username">Username or email</label>
-            <input class="input is-primary" type="text" :class="noLoginField ? 'is-danger' : ''"
+            <input class="input border-primary-text hover:border-primary-text" type="text" :class="noLoginField ? 'is-danger' : ''"
               placeholder="Username or email" v-model="loginField">
             <p v-show="noLoginField" class="help is-danger">Username is empty</p>
           </div>
           <div class="column">
             <label for="Name">Password</label>
-            <input class="input is-primary" type="password" :class="noPassword ? 'is-danger' : ''" placeholder="Password"
+            <input class="input border-primary-text hover:border-primary-text" type="password" :class="noPassword ? 'is-danger' : ''" placeholder="Password"
               v-model="password">
             <p v-show="noPassword" class="help is-danger">Password is empty</p>
 
           </div>
           <div class="column">
-            <button class="button is-primary is-fullwidth" type="submit">Login</button>
+            <button class="button bg-primary is-fullwidth text-white" type="submit">Login</button>
           </div>
         </div>
       </div>

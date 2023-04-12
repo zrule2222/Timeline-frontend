@@ -1,6 +1,8 @@
 <template>
     <div class="modal" :class="{ 'is-active': isActive }">
         <div class="modal-background"></div>
+        <div class="modal-card">
+
         <div class="modal-content">
             <section class="modal-card-body">
                 <label class="label">{{ messageToDisplay }}</label>
@@ -11,6 +13,7 @@
             </footer>
 
 
+        </div>
         </div>
     </div>
 </template>
